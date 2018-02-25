@@ -3,6 +3,7 @@ import re
 from datetime import date
 from datetime import timedelta
 from regularExpressions import pattern 
+import logging
 
 class GamedayDirectoryStructure:
     def __init__(self, rootURL, league):
@@ -16,20 +17,30 @@ class GamedayDirectoryStructure:
         month = gameName[9:11]
         day = gameName[12:14]
         
-        gameURL = self.__buildDayURL__(year, month, day) + gameName + "/"
+        gameURL = self.__buildDayURL__(year, month, day) + "/" + gameName
             
         return [gameURL]
     
     def __buildDayURL__(self, year, month, day):
-        dayURL = self.rootURL + "/year_" + year + "/month_" + month + "/day_" + \
-            day + "/"
+        monthString = str(month)
+        
+        if month < 10:
+            monthString = '%02d' % month
+        
+        dayString = str(day)
+        
+        if day < 10:
+            dayString = '%02d' % day
+                        
+        dayURL = self.rootURL + "/year_" + str(year) + "/month_" + monthString + "/day_" + \
+            dayString
         
         return dayURL
          
     def getGameURLsForDay(self, dateTuple):
         (year, month, day) = dateTuple
         
-        dayURL = self.__buildDayURL__(year, month, day) + "/"
+        dayURL = self.__buildDayURL__(year, month, day)
         
         gameURLs = self.__getGameURLsForDay__(dayURL)
         
@@ -78,6 +89,7 @@ class GamedayDirectoryStructure:
     
     def __getGameURLsForYear__(self, year):
         yearURL = self.__getYearURL__(year)
+        logging.debug("year URL:"+yearURL)
         
         monthURLs = self.__getMonthURLsForYear__(yearURL)
         
@@ -105,7 +117,8 @@ class GamedayDirectoryStructure:
         gameIDs = self.__parseGameIDs__(dayURL)
         
         for gameID in gameIDs:
-            gameURL = dayURL + '/' + gameID
+            gameURL = dayURL + "/" + gameID
+            logging.debug("game URL:"+gameURL)
             
             gameURLs.append(gameURL)
             
@@ -141,17 +154,21 @@ class GamedayDirectoryStructure:
 
             hitXML = Page(hitURL).getContent()
             
-            if hitXML.find("404 Not Found") == -1:
+            if hitXML.find("404 Not Found") == -1 and hitXML.find("NoSuchKey") == -1:
                 filteredURLs.append(url)   
+            else:
+                logging.debug("incomplete game info found, skipping URL:"+url)
+                logging.debug("no content found at URL:"+hitURL)
         
         return filteredURLs     
             
     def __parseGameIDs__(self, dayURL):
+        
         dayURLContent = Page(dayURL).getContent()
         
         #<li><a href="gid_2007_08_17_kcamlb_oakmlb_1/"> gid_2007_08_17_kcamlb_oakmlb_1/</a></li>
 
-        pattern = re.compile('gid_.*\/\">')
+        pattern = re.compile('gid_\d\d\d\d_\d\d_\d\d_\w*_\w*_\d\/\">')
         
         gameIDs = pattern.findall(dayURLContent)
         
@@ -169,6 +186,7 @@ class GamedayDirectoryStructure:
         
         for day in days:
             dayURL = monthURL + '/day_' + day
+            logging.debug("day URL:"+dayURL)
             
             dayURLs.append(dayURL)
             
@@ -181,6 +199,7 @@ class GamedayDirectoryStructure:
         
         for month in months:
             monthURL = yearURL + '/month_' + month
+            logging.debug("month URL:"+monthURL)
             
             monthURLs.append(monthURL)
             

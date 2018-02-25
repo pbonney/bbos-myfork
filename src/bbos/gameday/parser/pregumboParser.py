@@ -7,6 +7,7 @@ class PregumboParser(Parser):
     def parse(self, xmlProvider):
         pregumboJSON = xmlProvider.getPregumboJSON()
         if "404 Not Found" in pregumboJSON: return
+        if "<Error>" in pregumboJSON: return
         
         hitJSONs = json.loads(pregumboJSON)
         if not hitJSONs: return

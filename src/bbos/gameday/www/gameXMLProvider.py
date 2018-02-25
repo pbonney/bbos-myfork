@@ -1,6 +1,7 @@
 from www.page import Page
 import re
 from bbos.config.bbosConfig import BBOSConfig
+import logging
 
 class GamedayXMLProvider:
     def __init__(self, url):
@@ -39,13 +40,16 @@ class GamedayXMLProvider:
         
     def getHitXML(self):
         hitURL = self.url + "/inning/inning_hit.xml"
+        logging.debug("Hit URL:"+hitURL)
 
         hitXML = Page(hitURL).getContent()
         
+ 
         return hitXML
         
     def getInningXMLs(self):
         inningDirectoryURL = self.url + "/inning/"
+        logging.debug("Inning Dir URL:"+inningDirectoryURL)
 
         inningURLContent = Page(inningDirectoryURL).getContent()
         
@@ -57,7 +61,8 @@ class GamedayXMLProvider:
         
         inningURLs = [url[0:-4] for url in inningURLs]
         
-        inningURLs = [inningDirectoryURL + "/" + url for url in inningURLs]
+        inningURLs = [inningDirectoryURL + url for url in inningURLs]
+        [logging.debug("Inning URL:"+url) for url in inningURLs]
         
         inningContents = [Page(url).getContent() for url in inningURLs]
         
@@ -83,6 +88,7 @@ class GamedayXMLProvider:
         
     def getGameXML(self):
         url = self.url + "/game.xml"
+        logging.debug("Game URL:"+url)
 
         xml = Page(url).getContent()
         
@@ -90,6 +96,7 @@ class GamedayXMLProvider:
    
     def getLinescoreXML(self):
         url = self.url + "/linescore.xml"
+        logging.debug("Linescore URL:"+url)
 
         xml = Page(url).getContent()
         
@@ -97,6 +104,7 @@ class GamedayXMLProvider:
    
     def getPlayerXML(self):
         url = self.url + "/players.xml"
+        logging.debug("players URL:"+url)
 
         xml = Page(url).getContent()
         
@@ -114,6 +122,7 @@ class GamedayXMLProvider:
    
     def __getBatterBIOXMLs__(self):
         batterDirectoryURL = self.url + "/batters/"
+        logging.debug("batters URL:"+batterDirectoryURL)
 
         batterBIOURLContent = Page(batterDirectoryURL).getContent()
         
@@ -132,6 +141,7 @@ class GamedayXMLProvider:
    
     def __getPitcherBIOXMLs__(self):
         pitcherDirectoryURL = self.url + "/pitchers/"
+        logging.debug("pitchers URL:"+pitcherDirectoryURL)
 
         pitcherBIOURLContent = Page(pitcherDirectoryURL).getContent()
         
@@ -150,6 +160,7 @@ class GamedayXMLProvider:
    
     def getBoxScoreXML(self):
         url = self.url + "/boxscore.xml"
+        logging.debug("boxscore URL:"+url)
 
         xml = Page(url).getContent()
         
@@ -157,6 +168,7 @@ class GamedayXMLProvider:
     
     def getPregumboJSON(self):
         pregumboJSONURL = self.url + "/pregumbo.json"
+        logging.debug("pregumbo URL:"+pregumboJSONURL)
 
         pregumboJSON = Page(pregumboJSONURL).getContent()
         
@@ -165,6 +177,7 @@ class GamedayXMLProvider:
     def getFeedJSON(self, gameIDNumber):
         #http://statsapi.mlb.com/api/v1/game/413965/feed/color
         jsonURL = BBOSConfig.statsapiURL + str(gameIDNumber) + "/feed/color"
+        logging.debug("FeedJSON URL:"+jsonURL)
 
         jsonContent = Page(jsonURL).getContent()
         

@@ -60,20 +60,24 @@ class LoadGame(threadIt.Worker):
         self.db = db
         
     def consume(self, item):
-        gameURL = item
-        
-        xmlProvider = GamedayXMLProvider(gameURL)
-        
-        gameStatsWorkList = GameStatsWorkList()
-        
-        gameLoader = GamedayGameLoader(self.db, xmlProvider, gameStatsWorkList)
-        
-        if not gameLoader.isAlreadyLoaded():
-            logging.info("loading:" + xmlProvider.getGameName())
+        try:
+            gameURL = item
             
-            gameLoader.loadGame()
-        else:
-            logging.info("skipping previously loaded:" + xmlProvider.getGameName())
+            xmlProvider = GamedayXMLProvider(gameURL)
+            
+            gameStatsWorkList = GameStatsWorkList()
+            
+            gameLoader = GamedayGameLoader(self.db, xmlProvider, gameStatsWorkList)
+            
+            if not gameLoader.isAlreadyLoaded():
+                logging.info("loading:" + xmlProvider.getGameName())
+                
+                gameLoader.loadGame()
+            else:
+                logging.info("skipping previously loaded:" + xmlProvider.getGameName())
+        except:
+            logging.error("Died with Exception: ")
+            raise
 
 if __name__ == '__main__': 
     main()

@@ -195,6 +195,9 @@ class InningParser(Parser):
         min = pitchTime[9:11]
         sec = pitchTime[11:13]
         
+        if str(sec) == str(60):
+            sec = "59"
+        
         pitchTime = "%s:%s:%s" % (hour, min, sec)
         
         return pitchTime

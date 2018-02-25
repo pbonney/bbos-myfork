@@ -22,11 +22,12 @@ class GameParser(Parser):
         self.__parseTeams__(teamTags, gameInfo)
             
         stadiumTags = doc.getElementsByTagName('stadium')
-        stadiumTag = stadiumTags[0]
+        if stadiumTags:
+            stadiumTag = stadiumTags[0]
         
-        gameInfo['stadiumID'] = stadiumTag.getAttribute('id')
+            gameInfo['stadiumID'] = stadiumTag.getAttribute('id')
         
-        self.__parseStadium__(stadiumTag)
+            self.__parseStadium__(stadiumTag)
             
         self.game.setGameInfo(gameInfo)
     
