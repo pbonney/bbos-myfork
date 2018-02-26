@@ -443,7 +443,7 @@ select a.atbatID, p.id as gamePitchID,
 	 p.x,
 	 p.y,
 	 start_speed as 'Speed',  
-   CASE p.pitch_type 
+   CASE p.pitch_type
       WHEN "SC" THEN 'Screwball' 
       WHEN "EP" THEN 'Ephuus' 
       WHEN "KC" THEN 'KnuckleCurve' 
@@ -460,8 +460,8 @@ select a.atbatID, p.id as gamePitchID,
       WHEN "KN" THEN 'Knuckle' 
       WHEN "IN" THEN 'IntentionalBall' 
       WHEN "UN" THEN '' 
-      WHEN null THEN '' 
-      ELSE p.pitch_type 
+      WHEN NULL THEN '' 
+      ELSE COALESCE(p.pitch_type, '')
       END as type,
    IF(p.pitch_type = "SC", 1, 0) as 'Screwball',
    IF(p.pitch_type = "EP", 1, 0) as 'Ephuus',

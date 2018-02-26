@@ -1,7 +1,7 @@
 ################################# create the mlb/pitchfx database
 DROP DATABASE IF EXISTS `ssfbl`;
  CREATE DATABASE `ssfbl` /*!40100 DEFAULT CHARACTER SET latin1 */;
-set @gameYear:=2015;
+set @gameYear:=2017;
 
 ### change year!  at bottom too!  Spring stats
 
@@ -601,14 +601,14 @@ create index pPApitcherID on ssfbl.pPitchAttributes (pitcherID);
 create table ssfbl.springPosition
 select p.id, last, first, game_position, count(*) as cnt
   from gameday.players p
-where gameName like 'gid_2016%' -- change year!
+where gameName like 'gid_2018%' -- change year!
   and game_position is not null
 group by last, first, game_position;
 
 create table ssfbl.springBattingOrder
 select p.id, last, first, bat_order, count(*) as cnt
   from gameday.players p
-where gameName like 'gid_2016%' -- change year!
+where gameName like 'gid_2018%' -- change year!
   and bat_order is not null
 group by last, first, bat_order;
 
