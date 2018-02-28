@@ -27,8 +27,6 @@ def main():
             gamedayGameURLs = gamedayDirectory.getGameURLsForGame(options.game)    
         elif options.day:
             gamedayGameURLs = gamedayDirectory.getGameURLsForDay(eval(options.day))    
-        elif options.all != None:
-            gamedayGameURLs = gamedayDirectory.getGameURLsForAllAvailable()
         elif options.year:
             gamedayGameURLs = gamedayDirectory.getGameURLsForYear(options.year)
         else:
