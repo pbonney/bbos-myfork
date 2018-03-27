@@ -81,6 +81,9 @@ class BoxScoreParser(Parser):
         for batterTag in batterTags:
             batter = self.mapTagWithList(batterTag, GamedayConfig.parser_boxscore_batter)
             
+            if not 'pos' in batter:
+                batter['pos'] = 'U'
+                
             if batter['pos'] and len(batter['pos']) > 2:
                 batter['pos'] = batter['pos'][:2]
        

@@ -175,3 +175,36 @@ select concat(p.last, ', ', p.first, ' ', p.eliasID) as "concat",
    and fpp.pitcherID = p.eliasID
 	 and (fpp.1stIP > 15 or fpp.2ndIP > 15)
 	 and (fpp.1stIP > 1 and fpp.2ndIP > 1);
+   
+   
+    drop table if exists ssfbl.fWhiffSecondHalf;
+create table ssfbl.fWhiffSecondHalf
+ SELECT play.last,
+       play.first,
+       whiffStuff.StrikePerc,
+       whiffStuff.WhiffPerc,
+       whiffStuff.inZoneWhiffPerc
+       from mlb.players play, (
+ select ab.pitcherID,
+       sum(case when p.TheoreticalStrike = 1 and pr.whiff = 1 then 1 else 0 end) inZoneWhiffs,
+       count(p.pitchID) as TotalPitches,
+       sum(case when p.TheoreticalStrike = 1 then 1 else 0 end)/
+       count(p.pitchID) as StrikePerc,
+       sum(case when pr.whiff = 1 then 1 else 0 end)/
+       count(p.pitchID) as WhiffPerc,
+       (sum(case when p.TheoreticalStrike = 1 and pr.whiff = 1 then 1 else 0 end) /
+       count(p.pitchID)) as inZoneWhiffPerc, 
+       s.gameSetName, s.gameSubset, s.atbatSetName, s.atbatSubset
+  FROM mlb.pitches p, mlb.pitchresult pr, ssfbl.subsets s, mlb.atbats ab
+ where (p.TheoreticalStrike > 0 or p.TheoreticalBall > 0)
+   and pr.pitchID = p.pitchID
+   and p.atbatID = ab.atbatID
+   #and s.atbatID = ab.atbatID
+   and ab.pitcherID = 112526
+   and s.gameSetName = "secondHalf"
+   and s.atbatSetName = "all"
+ group by ab.pitcherID, s.gameSetName, s.gameSubset, s.atbatSetName, s.atbatSubset
+ ) whiffStuff
+ where whiffStuff.pitcherID = play.eliasID;
+  
+  

@@ -619,5 +619,27 @@ select sbo.*
    and cnt > 3
 	 and p.eliasID = sbo.id;
 
-
+drop table if exists ssfbl.springPitching;
+create table ssfbl.springPitching
+select p.last, p.first, (BBs / innings) * 9 as BBp9, (Ks / innings) * 9 as Kp9, (HRs / innings) * 9 as HRp9, innings,
+       Ks / BBs as K_BB
+  from
+(
+select a.pitcherID,
+       sum(ar.out_) outs,
+       count(ar.atbatID) battersFaced,
+			 sum(ar.walk + ar.intentionalWalk) as BBs,
+			 sum(ar.strikeout + ar.strikeoutDoublePlay) as Ks,
+			 sum(ar.hit) as hits,
+			 sum(ar.hr) as HRs,
+			 sum(ar.out_) / 3 as innings
+  from mlb.atbatresults ar, mlb.atbats a, mlb.games g
+ where ar.atbatID = a.atbatID
+   and a.gameID = g.gameID
+   and g.gameYear = 2018
+ group by a.pitcherID
+ ) prs, mlb.players p
+ where p.eliasID = prs.pitcherID
+   and innings > 4;
+ 
 
