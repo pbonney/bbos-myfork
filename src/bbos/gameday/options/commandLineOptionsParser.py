@@ -7,6 +7,7 @@ def parseOptions():
     
     optionParser.add_option('-g', '--game', dest='game', help='the gameday game name to load', metavar='GAME')
     optionParser.add_option('-d', '--day', dest='day', help="""the day to load in the format ('2008','09','24')""", metavar='DAY')
+    optionParser.add_option('-m', '--month', dest='month', help="""the month to load in format ('2008','09')""", metavar='MONTH')
     optionParser.add_option('-y', '--year', dest='year', help="""the year to load""", metavar='YEAR')
     optionParser.add_option('-r', '--recent', action="store_false", help="""loads recent games (days back defined in gamedayConfig.py)""")
     

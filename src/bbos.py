@@ -23,17 +23,21 @@ def main():
     try:
         gamedayDirectory = GamedayDirectoryStructure(BBOSConfig.gamedayURL, league)
         
+        logging.debug("startup options:" + str(options))
+        
         if options.game:
             gamedayGameURLs = gamedayDirectory.getGameURLsForGame(options.game)    
         elif options.day:
             gamedayGameURLs = gamedayDirectory.getGameURLsForDay(eval(options.day))    
+        elif options.month:
+            gamedayGameURLs = gamedayDirectory.getGameURLsForMonth(eval(options.month))
         elif options.year:
             gamedayGameURLs = gamedayDirectory.getGameURLsForYear(options.year)
         elif options.recent:
             gamedayGameURLs = gamedayDirectory.getGameURLsForLastNumberOfDays(BBOSConfig.gamedayDaysBackToLoad)
         else:
             gamedayGameURLs = gamedayDirectory.getGameURLsForLastNumberOfDays(BBOSConfig.gamedayDaysBackToLoad)
-            
+
         gamedayGameURLs.reverse()
         
         logging.info("Distributing " + str(len(gamedayGameURLs)) + " urls to " + str(BBOSConfig.numberOfThreads) + " threads")
