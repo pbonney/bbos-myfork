@@ -598,6 +598,7 @@ create index pPApitcherID on ssfbl.pPitchAttributes (pitcherID);
 
 
 ### change year!   Spring stats
+drop table if exists ssfbl.springPosition;
 create table ssfbl.springPosition
 select p.id, last, first, game_position, count(*) as cnt
   from gameday.players p
@@ -605,6 +606,7 @@ where gameName like 'gid_2018%' -- change year!
   and game_position is not null
 group by last, first, game_position;
 
+drop table if exists ssfbl.springBattingOrder;
 create table ssfbl.springBattingOrder
 select p.id, last, first, bat_order, count(*) as cnt
   from gameday.players p
@@ -612,6 +614,7 @@ where gameName like 'gid_2018%' -- change year!
   and bat_order is not null
 group by last, first, bat_order;
 
+drop table if exists ssfbl.springRBIBatters;
 create table ssfbl.springRBIBatters
 select sbo.*
   from ssfbl.springbattingorder sbo, ssfbl.ssfblplayers p
@@ -621,7 +624,7 @@ select sbo.*
 
 drop table if exists ssfbl.springPitching;
 create table ssfbl.springPitching
-select p.last, p.first, (BBs / innings) * 9 as BBp9, (Ks / innings) * 9 as Kp9, (HRs / innings) * 9 as HRp9, innings,
+select prs.pitcherID, p.last, p.first, (BBs / innings) * 9 as BBp9, (Ks / innings) * 9 as Kp9, (HRs / innings) * 9 as HRp9, innings,
        Ks / BBs as K_BB
   from
 (
@@ -642,4 +645,49 @@ select a.pitcherID,
  where p.eliasID = prs.pitcherID
    and innings > 4;
  
+drop table if exists ssfbl.springPitches;
+ create table ssfbl.springPitches
+select a.pitcherID,
+       p.type, 
+       avg(p.speed) as speed,
+       count(p.type) as pitches
+  from mlb.pitches p, mlb.atbats a, mlb.games g
+ where p.atbatID = a.atbatID
+   and a.gameID = g.gameID
+   and g.gameYear = 2018
+ group by a.pitcherID, p.type;
+ 
+alter table ssfbl.springPitches add perc DECIMAL(6,3);
 
+ create table ssfbl.t_springPitchesTotals
+ select sp.pitcherID, sum(pitches) as pitches 
+   from ssfbl.springPitches sp
+  group by sp.pitcherID;
+  
+update ssfbl.springPitches p
+   set p.perc = (p.pitches / (select pitches from ssfbl.t_springPitchesTotals sp where p.pitcherID = sp.pitcherID));
+   
+drop table if exists ssfbl.t_springPitchesTotals;
+   
+drop table if exists ssfbl.whiffRates;
+create table ssfbl.whiffRates
+select type, stddev(rate) as stdev, avg(rate) as average from (
+select a.pitcherID, p.type, sum(pr.whiff) / count(p.pitchID) as rate
+  from mlb.atbats a, mlb.pitches p, mlb.pitchresult pr
+ where a.atbatID = p.atbatID
+	 and p.pitchID = pr.pitchID
+   #and a.pitcherID = 462136
+   #and p.type = 'Curve'
+ group by a.pitcherID, p.type) sub group by type;
+
+drop table if exists ssfbl.pitcherWhiffRates;
+create table ssfbl.pitcherWhiffRates
+select pitcherID, type, 1whiffZ, 2whiffZ, 1whiffZ - 2whiffZ as whiffZDiff from ( 
+select rp.pitcherID, rp.type, rp.`1whiffP`,
+      (rp.`1whiffP` - (select w.average from ssfbl.whiffRates w where w.type = rp.type)) / 
+      (select w.stdev from ssfbl.whiffRates w where w.type = rp.type) as 1whiffZ,
+      (rp.`2whiffP` - (select w.average from ssfbl.whiffRates w where w.type = rp.type)) / 
+      (select w.stdev from ssfbl.whiffRates w where w.type = rp.type) as 2whiffZ
+  from ssfbl.rpitchattributes rp) sub;
+  
+  
