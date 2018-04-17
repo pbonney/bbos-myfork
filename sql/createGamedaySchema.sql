@@ -29,7 +29,7 @@ CREATE TABLE  action (
 
 DROP TABLE IF EXISTS hits;
 CREATE TABLE hits (
-       hitID     mediumint(8) DEFAULT NULL AUTO_INCREMENT,
+       hitID     mediumint(8) AUTO_INCREMENT,
        gameName  varchar(38) DEFAULT NULL,
        des       VARCHAR(60) DEFAULT NULL,
        x         double(5,2) DEFAULT NULL,
@@ -73,7 +73,7 @@ CREATE TABLE pitches (
   gameName          varchar(38) DEFAULT NULL,
   `gameAtBatID`     smallint(2) DEFAULT NULL,
   `id`              mediumint(9) UNSIGNED,
-  gamedayPitchID    int(8) DEFAULT NULL AUTO_INCREMENT,
+  gamedayPitchID    int(8) AUTO_INCREMENT,
   `des`             VARCHAR(50) DEFAULT NULL,
   `type`            varchar(1) DEFAULT NULL,
   `x`               VARCHAR(25),
@@ -141,7 +141,7 @@ CREATE TABLE Teams (
 
 DROP TABLE IF EXISTS Games;
 CREATE TABLE Games (
-       gameName          varchar(38) DEFAULT NULL,
+       gameName          varchar(38),
        leagueLevel       varchar(5),
        stadiumID         int(8) UNSIGNED,
        game_pk			 int(8) UNSIGNED,
