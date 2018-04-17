@@ -24,7 +24,7 @@ def main():
         gamedayDirectory = GamedayDirectoryStructure(BBOSConfig.gamedayURL, league)
         
         logging.debug("startup options:" + str(options))
-    
+        
         if options.game:
             gamedayGameURLs = gamedayDirectory.getGameURLsForGame(options.game)    
         elif options.day:
