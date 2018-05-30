@@ -1,7 +1,7 @@
 from bbos.config import loggingSetup
 loggingSetup.initializeLogging("install.py")
 import logging
-import shutil 
+import shutil
 from bbos.config.bbosConfig import BBOSConfig
 from osandio.fileCompression import Unzipper
 import os
@@ -12,12 +12,12 @@ import os
 
 def main():
     logging.info("Starting bbos install!")
-    
+
     from distutils.sysconfig import get_python_lib
     pythonLibDir = get_python_lib()
-    
+
     copyAndUnzip(getSQLAlchemyLocation(), pythonLibDir, getSQLAlchemyFileName())
-    
+
     copyAndUnzip(getPyMySQLLocation(), pythonLibDir, getPyMySQLFileName())
 
 def getSQLAlchemyFileName():
@@ -34,13 +34,13 @@ def getPyMySQLLocation():
 
 def copyAndUnzip(toMove, destinationDir, zipFileName):
     destinationFileName = destinationDir + os.sep + zipFileName
-    
+
     shutil.copy(toMove, destinationFileName)
-    
+
     unzipper = Unzipper(BBOSConfig.unzipController)
-    
+
     unzipper.unzip(destinationFileName, destinationDir)
 
-if __name__ == '__main__': 
+if __name__ == '__main__':
     main()
-    
+

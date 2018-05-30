@@ -12,32 +12,36 @@ from bbos.gameday.loader.playerBioWorkList import PlayerBioWorkList
 from bbos.db.db import DB
 from bbos.gameday.options import commandLineOptionsParser
 
-        
+
 def main():
     options = commandLineOptionsParser.parseOptions()
-    
+
     logging.info("Starting bbosPlayerBio!")
-    
+
     league = options.league
-    
+
     try:
         gamedayDirectory = GamedayDirectoryStructure(BBOSConfig.gamedayURL, league)
-        
+
+        logging.debug("startup options:" + str(options))
+
         if options.game:
-            gamedayGameURLs = gamedayDirectory.getGameURLsForGame(options.game)    
+            gamedayGameURLs = gamedayDirectory.getGameURLsForGame(options.game)
         elif options.day:
-            gamedayGameURLs = gamedayDirectory.getGameURLsForDay(eval(options.day))    
-        elif options.all != None:
-            gamedayGameURLs = gamedayDirectory.getGameURLsForAllAvailable()
+            gamedayGameURLs = gamedayDirectory.getGameURLsForDay(eval(options.day))
+        elif options.month:
+            gamedayGameURLs = gamedayDirectory.getGameURLsForMonth(eval(options.month))
         elif options.year:
             gamedayGameURLs = gamedayDirectory.getGameURLsForYear(options.year)
+        elif options.recent:
+            gamedayGameURLs = gamedayDirectory.getGameURLsForLastNumberOfDays(BBOSConfig.gamedayDaysBackToLoad)
         else:
             gamedayGameURLs = gamedayDirectory.getGameURLsForLastNumberOfDays(BBOSConfig.gamedayDaysBackToLoad)
-            
+
         logging.info("Distributing" + str(len(gamedayGameURLs)) + "urls to" + str(BBOSConfig.numberOfThreads) + "threads")
-        
+
         threadIt.threadThis(BBOSConfig.numberOfThreads, gamedayGameURLs, LoadGameFactory())
-        
+
         logging.info("")
         logging.info("load complete!")
     except Exception, e:
@@ -47,27 +51,27 @@ def main():
 
 class LoadGameFactory(threadIt.WorkerFactory):
     def produce(self):
-        return LoadGame(DB())  
+        return LoadGame(DB())
 
 class LoadGame(threadIt.Worker):
     def __init__(self, db):
         self.db = db
-        
+
     def consume(self, item):
         gameURL = item
-        
+
         xmlProvider = GamedayXMLProvider(gameURL)
-            
+
         playerBioWorkList = PlayerBioWorkList()
-            
+
         gameLoader = GamedayGameLoader(self.db, xmlProvider, playerBioWorkList)
-            
+
         if not gameLoader.isAlreadyLoaded():
             logging.info("loading:" + xmlProvider.getGameName())
-                
+
             gameLoader.loadGame()
 
 
-if __name__ == '__main__': 
+if __name__ == '__main__':
     main()
-    
+

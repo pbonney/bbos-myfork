@@ -1,46 +1,47 @@
 from bbos.gameday.parser.parser import Parser
 from bbos.config.gamedayConfig import GamedayConfig
-    
+
 class PlayerBioParser(Parser):
-    
+
     def parse(self, xmlProvider):
         playerBioXMLs = xmlProvider.getPlayerBIOXMLs()
-        
+
         self.playerBios = []
-        
+
         for xml in playerBioXMLs:
-            self.__parse__(xml) 
-            
+            self.__parse__(xml)
+
         self.game.setPlayerBios(self.playerBios)
-    
+
     def __parse__(self, playerBioXML):
         doc = self.createDocument(playerBioXML)
         if doc == None: return
 
         playerTags = doc.getElementsByTagName('Player')
-        
+
         if not len(playerTags): return
-        
+
         playerTag = playerTags[0]
-        
+
         self.__parsePlayerTag__(playerTag)
-           
+
     def __parsePlayerTag__(self, playerTag):
         playerBio = self.mapTagWithList(playerTag, GamedayConfig.parser_playerbio_player)
-        
-        playerHasHeight = ('height' in playerBio) and (len(playerBio['height']) != 0)
-        playerHeightNotNull = "null" != playerBio['height']
-        
-        if playerHasHeight and playerHeightNotNull:
-            (feet, inches) = playerBio['height'].split('-')
-            playerBio['heightFeet'] = feet
-            playerBio['heightInches'] = inches
-            
-        del playerBio['height']                
-            
+
+        if 'height' in playerBio.keys():
+            playerHasHeight = ('height' in playerBio) and (len(playerBio['height']) != 0)
+            playerHeightNotNull = "null" != playerBio['height']
+
+            if playerHasHeight and playerHeightNotNull:
+                (feet, inches) = playerBio['height'].split('-')
+                playerBio['heightFeet'] = feet
+                playerBio['heightInches'] = inches
+
+            del playerBio['height']
+
         self.playerBios.append(playerBio)
-            
-            
+
+
 """
 <Player team="mil" id="122195" pos="P" type="pitcher" first_name="Brian" last_name="Shouse" jersey_number="51" height="5-10" weight="195" bats="L" throws="L" dob="09/26/1968">
 <season avg=".236" ab="191" hr="5" bb="14" so="33" w="5" l="1" sv="2"/>

@@ -9,36 +9,36 @@ class DB:
     def __init__(self):
         self.mySQLCommander = MySQLCommander(BBOSConfig.mySQLLocation, BBOSConfig.dbUser, BBOSConfig.dbPass, BBOSConfig.dbHost, BBOSConfig.dbPort)
         self.db = MySQLConnection(BBOSConfig.dbUser, BBOSConfig.dbPass, BBOSConfig.dbHost, BBOSConfig.dbPort, '');
-    
+
     def run(self, sqlFile):
         command = self.mySQLCommander.createMySQLCommand(sqlFile)
-        logging.debug("running:" + command.getCommand())
-        
+        logging.info("running:" + command.getCommand())
+
         self.mySQLCommander.run(command)
-        logging.debug("complete")
-        
+        logging.info("complete")
+
     def execute(self, sql):
         self.logStatement(sql)
-        
+
         try:
             self.db.execute(sql)
         except Warning, w:
             raise SQLException(w)
         except Exception, e:
             raise SQLException(e)
-        
+
     def logStatement(self, sql):
         logging.debug("BEGIN mySQL Statement:\n  %s\nEND Statement" % (sql))
-    
+
     def select(self, sql):
         self.logStatement(sql)
-        
+
         return self.db.select(sql)
 
 
 class SQLException(Exception):
     def __init__(self, value):
         self.value = value
-    
+
     def __str__(self):
         return repr(self.value)

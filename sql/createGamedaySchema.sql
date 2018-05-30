@@ -7,22 +7,21 @@ USE `gameday`;
 DROP TABLE IF EXISTS action;
 CREATE TABLE  action (
     `gameName`    	VARCHAR(38) DEFAULT NULL,
-    `atbatNum`      smallint(3) UNSIGNED DEFAULT NULL,
-    `inning`      	TINYINT(2) UNSIGNED DEFAULT NULL,
-    `b`           	TINYINT(1) UNSIGNED DEFAULT NULL,
-    `s`           	TINYINT(1) UNSIGNED DEFAULT NULL,
-    `o`           	TINYINT(3) UNSIGNED DEFAULT NULL,
+    `atbatNum`      smallint(3) DEFAULT NULL,
+    `inning`      	TINYINT(2) DEFAULT NULL,
+    `b`           	TINYINT(1) DEFAULT NULL,
+    `s`           	TINYINT(1) DEFAULT NULL,
+    `o`           	TINYINT(3) DEFAULT NULL,
     score         	VARCHAR(2),
     des           	VARCHAR(512),
-    des_es         	VARCHAR(512),
     event         	VARCHAR(60),
     `event2`      	varchar(40) DEFAULT NULL,
     `event3`      	varchar(40) DEFAULT NULL,
-    player        	MEDIUMINT(6) UNSIGNED DEFAULT NULL,
+    player        	MEDIUMINT(6) DEFAULT NULL,
     pitch         	TINYINT(9) UNSIGNED,
-    eventNumber   	SMALLINT(4) UNSIGNED DEFAULT NULL,
+    eventNumber   	SMALLINT(4) DEFAULT NULL,
     halfInning    	VARCHAR(6),
-    tfs		      	varchar(6) DEFAULT NULL, 
+    tfs		      	varchar(6) DEFAULT NULL,
     `tfs_zulu`    	varchar(20) DEFAULT NULL,
     home_team_runs  INT(3) UNSIGNED,
     away_team_runs  INT(3) UNSIGNED
@@ -30,34 +29,33 @@ CREATE TABLE  action (
 
 DROP TABLE IF EXISTS hits;
 CREATE TABLE hits (
-       hitID     mediumint(8) UNSIGNED DEFAULT NULL AUTO_INCREMENT,
+       hitID     mediumint(8) AUTO_INCREMENT,
        gameName  varchar(38) DEFAULT NULL,
        des       VARCHAR(60) DEFAULT NULL,
-       x         double(5,2) UNSIGNED DEFAULT NULL,
-       y         double(5,2) UNSIGNED DEFAULT NULL,
-       batter    int(6) UNSIGNED DEFAULT NULL,
-       pitcher   int(6) UNSIGNED DEFAULT NULL, 
-       type      varchar(1) DEFAULT NULL, 
-       inning    smallint(2) UNSIGNED DEFAULT NULL,
-  PRIMARY KEY  (hitID) 
-);             
+       x         double(5,2) DEFAULT NULL,
+       y         double(5,2) DEFAULT NULL,
+       batter    int(6) DEFAULT NULL,
+       pitcher   int(6) DEFAULT NULL,
+       type      varchar(1) DEFAULT NULL,
+       inning    smallint(2) DEFAULT NULL,
+  PRIMARY KEY  (hitID)
+);
 
 DROP TABLE IF EXISTS atbats;
 CREATE TABLE atbats (
   gameName      varchar(38) DEFAULT NULL,
-  `inning`      smallint(2) UNSIGNED DEFAULT NULL,
-  `num`         smallint(3) UNSIGNED DEFAULT NULL,
-  `b`           TINYINT(1) UNSIGNED DEFAULT NULL,
-  `s`           TINYINT(1) UNSIGNED DEFAULT NULL,
-  `o`           TINYINT(3) UNSIGNED DEFAULT NULL,
+  `inning`      smallint(2) DEFAULT NULL,
+  `num`         smallint(3) DEFAULT NULL,
+  `b`           TINYINT(1) DEFAULT NULL,
+  `s`           TINYINT(1) DEFAULT NULL,
+  `o`           TINYINT(3) DEFAULT NULL,
   `batter`      MEDIUMINT(6) UNSIGNED,
   `pitcher`     MEDIUMINT(6) UNSIGNED,
   `des`         VARCHAR(512) DEFAULT NULL,
-  `des_es`      VARCHAR(512) DEFAULT NULL,
   `stand`       CHAR(1) DEFAULT NULL,
   `score`       varchar(2) DEFAULT NULL,
-  `away_team_runs` int(3) unsigned DEFAULT NULL,
-  `home_team_runs` int(3) unsigned DEFAULT NULL,
+  `away_team_runs` int(3) DEFAULT NULL,
+  `home_team_runs` int(3) DEFAULT NULL,
   `event`       VARCHAR(40) DEFAULT NULL,
   `event2`      varchar(40) DEFAULT NULL,
   `event3`      varchar(40) DEFAULT NULL,
@@ -73,50 +71,50 @@ CREATE TABLE atbats (
 DROP TABLE IF EXISTS pitches;
 CREATE TABLE pitches (
   gameName          varchar(38) DEFAULT NULL,
-  `gameAtBatID`     smallint(2) UNSIGNED DEFAULT NULL,
+  `gameAtBatID`     smallint(2) DEFAULT NULL,
   `id`              mediumint(9) UNSIGNED,
-  gamedayPitchID    int(8) UNSIGNED DEFAULT NULL AUTO_INCREMENT,
+  gamedayPitchID    int(8) AUTO_INCREMENT,
   `des`             VARCHAR(50) DEFAULT NULL,
-  `des_es`             VARCHAR(70) DEFAULT NULL,
   `type`            varchar(1) DEFAULT NULL,
-  `x`               VARCHAR(7),
-  `y`               VARCHAR(7),
-  `start_speed`     DECIMAL(6,3) UNSIGNED DEFAULT NULL,
-  `end_speed`       DECIMAL(6,3) UNSIGNED DEFAULT NULL,
-  `sz_top`          DECIMAL(6,3) UNSIGNED DEFAULT NULL,
+  `x`               VARCHAR(25),
+  `y`               VARCHAR(25),
+  `start_speed`     DECIMAL(6,3) DEFAULT NULL,
+  `end_speed`       DECIMAL(6,3) DEFAULT NULL,
+  `sz_top`          DECIMAL(6,3) DEFAULT NULL,
   `sz_bot`          DECIMAL(6,3) DEFAULT NULL,
   `pfx_x`           DECIMAL(6,3) DEFAULT NULL,
   `pfx_z`           DECIMAL(6,3) DEFAULT NULL,
   `px`              DECIMAL(6,3) DEFAULT NULL,
   `pz`              DECIMAL(6,3) DEFAULT NULL,
   `x0`              DECIMAL(6,3) DEFAULT NULL,
-  `y0`              decimal(6,3) UNSIGNED DEFAULT NULL,
+  `y0`              decimal(6,3) DEFAULT NULL,
   `z0`              DECIMAL(6,3) DEFAULT NULL,
   `vx0`             DECIMAL(6,3) DEFAULT NULL,
   `vy0`             DECIMAL(6,3) DEFAULT NULL,
   `vz0`             DECIMAL(6,3) DEFAULT NULL,
   `ax`              DECIMAL(6,3) DEFAULT NULL,
-  `ay`              DECIMAL(6,3) UNSIGNED DEFAULT NULL,
+  `ay`              DECIMAL(6,3) DEFAULT NULL,
   `az`              DECIMAL(6,3) DEFAULT NULL,
   `break_y`         DECIMAL(6,3) DEFAULT NULL,
   `break_z`         DECIMAL(6,3) DEFAULT NULL,
   `break_x`         DECIMAL(6,3) DEFAULT NULL,
   `break_angle`     DECIMAL(6,3) DEFAULT NULL,
-  `break_length`    DECIMAL(6,3) UNSIGNED DEFAULT NULL,
+  `break_length`    DECIMAL(11,3) DEFAULT NULL,
   `pitch_type`      varchar(2) DEFAULT NULL,
   `type_confidence` float DEFAULT NULL,
   `spin_dir`        float DEFAULT NULL,
   `spin_rate`       float DEFAULT NULL,
   `sv_id`           time DEFAULT NULL,
-  `zone` int(2) unsigned DEFAULT NULL,
-  `nasty` int(2) unsigned DEFAULT NULL,
+  `zone` int(2) DEFAULT NULL,
+  `nasty` int(2) DEFAULT NULL,
   `cc` varchar(256) DEFAULT NULL,
   `mt` varchar(256) DEFAULT NULL,
-  `on_1b` int(6) unsigned DEFAULT NULL,
-  `on_2b` int(6) unsigned DEFAULT NULL,
-  `on_3b` int(6) unsigned DEFAULT NULL,
+  `on_1b` int(6) DEFAULT NULL,
+  `on_2b` int(6) DEFAULT NULL,
+  `on_3b` int(6) DEFAULT NULL,
   `tfs`             VARCHAR(10) DEFAULT NULL,
   `tfs_zulu`             VARCHAR(25) DEFAULT NULL,
+  `play_guid`       VARCHAR(50) DEFAULT NULL,
   PRIMARY KEY  (gamedayPitchID)
 ) ENGINE=InnoDB AUTO_INCREMENT=1315461 DEFAULT CHARSET=latin1;
 
@@ -133,9 +131,9 @@ CREATE TABLE Teams (
       id                VARCHAR(8) DEFAULT NULL,
       file              varchar(8) DEFAULT NULL,
       name              VARCHAR(40) DEFAULT NULL,
-      league            VARCHAR(3) DEFAULT NULL,
-      league_id         VARCHAR(3),
-      division_id       VARCHAR(3),
+      league            VARCHAR(5) DEFAULT NULL,
+      league_id         VARCHAR(5),
+      division_id       VARCHAR(5),
       type              VARCHAR(5) DEFAULT NULL,
       w                 int(3) DEFAULT NULL,
       l                 int(3) DEFAULT NULL
@@ -143,7 +141,7 @@ CREATE TABLE Teams (
 
 DROP TABLE IF EXISTS Games;
 CREATE TABLE Games (
-       gameName          varchar(38) DEFAULT NULL,
+       gameName          varchar(38),
        leagueLevel       varchar(5),
        stadiumID         int(8) UNSIGNED,
        game_pk			 int(8) UNSIGNED,
@@ -159,14 +157,14 @@ CREATE TABLE Games (
 DROP TABLE IF EXISTS Stadiums;
 CREATE TABLE Stadiums (
        gameName          varchar(38) DEFAULT NULL,
-       id                mediumint(9) UNSIGNED DEFAULT NULL,
+       id                mediumint(9) DEFAULT NULL,
        name              VARCHAR(60),
        location          VARCHAR(60),
        venue_w_chan_loc  CHAR(60)
 );
 
--- Keep track of the complete daily rosters. This 
--- table will include detailed information about 
+-- Keep track of the complete daily rosters. This
+-- table will include detailed information about
 -- who played in each game.
 DROP TABLE IF EXISTS players;
 CREATE TABLE players (
@@ -182,7 +180,7 @@ CREATE TABLE players (
        status         VARCHAR(3),
        rl             varchar(4) DEFAULT NULL,
        num            varchar(2),
-       id             MEDIUMINT(6) UNSIGNED DEFAULT NULL,
+       id             MEDIUMINT(6) DEFAULT NULL,
        boxname        varchar(66),
        `avg`          decimal(5,3) DEFAULT NULL,
        hr             int(4) UNSIGNED, -- s_rbi
@@ -190,21 +188,21 @@ CREATE TABLE players (
        wins           smallint(2) DEFAULT NULL,
        losses         smallint(2) DEFAULT NULL,
        era            decimal(6,2) DEFAULT NULL
-);           
+);
 
 DROP TABLE IF EXISTS umpires;
 CREATE TABLE umpires (
   gameName         varchar(38) DEFAULT NULL,
   position         varchar(32) DEFAULT NULL,
   name             VARCHAR(50) DEFAULT NULL,
-  id               int(6) UNSIGNED DEFAULT NULL
-);          
+  id               int(6) DEFAULT NULL
+);
 
 DROP TABLE IF EXISTS coaches;
 CREATE TABLE coaches (
   gameName          varchar(38) DEFAULT NULL,
-  id                int(6) UNSIGNED DEFAULT NULL,
-  num               varchar(2) DEFAULT NULL,
+  id                int(6) DEFAULT NULL,
+  num               varchar(4) DEFAULT NULL,
   team              varchar(15) DEFAULT NULL,
   homeAway          varchar(4) DEFAULT NULL,
   first             VARCHAR(50) DEFAULT NULL,
@@ -215,46 +213,46 @@ CREATE TABLE coaches (
 DROP TABLE IF EXISTS batters;
 CREATE TABLE batters (
        gameName     varchar(38) DEFAULT NULL,
-       id           int(6) UNSIGNED DEFAULT NULL,
+       id           int(6) DEFAULT NULL,
        `name`       varchar(40) DEFAULT NULL,
        `name_display_first_last` varchar(40) DEFAULT NULL,
        `avg` decimal(5,3) DEFAULT NULL,
-       pos          VARCHAR(50) DEFAULT NULL, -- position
+       pos          VARCHAR(100) DEFAULT NULL, -- position
        bo           int(4) UNSIGNED, -- batting order
        s_hr         int(4) UNSIGNED, -- s_hr
        s_rbi        int(4) UNSIGNED, -- s_rbi
-       s_h          int(4) UNSIGNED, -- 
-       s_bb         int(4) UNSIGNED, -- 
-       s_r          int(4) UNSIGNED, -- 
-       s_so         int(4) UNSIGNED, -- 
-       go           smallint(2) UNSIGNED DEFAULT NULL, -- at bats
-       ao           smallint(2) UNSIGNED DEFAULT NULL, -- at bats
-       ab           smallint(2) UNSIGNED DEFAULT NULL, -- at bats
-       h            smallint(2) UNSIGNED DEFAULT NULL, -- hits
-       hr           smallint(2) UNSIGNED DEFAULT NULL, -- home runs
-       d            smallint(2) UNSIGNED DEFAULT NULL, -- doubles
-       t            smallint(2) UNSIGNED DEFAULT NULL, -- triples
-       sac          smallint(2) UNSIGNED DEFAULT NULL, -- sacrifice?
-       bb           smallint(2) UNSIGNED DEFAULT NULL, -- walks
-       rbi          smallint(2) UNSIGNED DEFAULT NULL, -- runs batted in
-       so           smallint(2) UNSIGNED DEFAULT NULL, -- strikeouts
-       r            smallint(2) UNSIGNED DEFAULT NULL, -- runs scored
+       s_h          int(4) UNSIGNED, --
+       s_bb         int(4) UNSIGNED, --
+       s_r          int(4) UNSIGNED, --
+       s_so         int(4) UNSIGNED, --
+       go           smallint(2) DEFAULT NULL, -- at bats
+       ao           smallint(2) DEFAULT NULL, -- at bats
+       ab           smallint(2) DEFAULT NULL, -- at bats
+       h            smallint(2) DEFAULT NULL, -- hits
+       hr           smallint(2) DEFAULT NULL, -- home runs
+       d            smallint(2) DEFAULT NULL, -- doubles
+       t            smallint(2) DEFAULT NULL, -- triples
+       sac          smallint(2) DEFAULT NULL, -- sacrifice?
+       bb           smallint(2) DEFAULT NULL, -- walks
+       rbi          smallint(2) DEFAULT NULL, -- runs batted in
+       so           smallint(2) DEFAULT NULL, -- strikeouts
+       r            smallint(2) DEFAULT NULL, -- runs scored
        hbp          smallint(2) UNSIGNED, -- hit by pitch
        sf           smallint(2) UNSIGNED, -- sac flies
        sb           smallint(2) UNSIGNED, -- stolen bases
-       lob          smallint(2) UNSIGNED DEFAULT NULL, -- left on base
-       a            smallint(2) UNSIGNED DEFAULT NULL, -- assists      
-       e            smallint(2) UNSIGNED DEFAULT NULL, -- errors
-       po           smallint(2) UNSIGNED DEFAULT NULL, -- put outs
+       lob          smallint(2) DEFAULT NULL, -- left on base
+       a            smallint(2) DEFAULT NULL, -- assists
+       e            smallint(2) DEFAULT NULL, -- errors
+       po           smallint(2) DEFAULT NULL, -- put outs
        fldg         DECIMAL(4,3) DEFAULT NULL,-- fielding percentage
        note         varchar(10),
-       pb           smallint(2) UNSIGNED  -- passed balls
+       pb           smallint(2)  -- passed balls
 );
 
 DROP TABLE IF EXISTS pitchers;
 CREATE TABLE pitchers (
        gameName     varchar(38) DEFAULT NULL,
-       id           int(6) UNSIGNED DEFAULT NULL,
+       id           int(6) DEFAULT NULL,
        `name` varchar(40) DEFAULT NULL,
        `name_display_first_last` varchar(40) DEFAULT NULL,
        `era` decimal(6,2) DEFAULT NULL,
@@ -269,16 +267,16 @@ CREATE TABLE pitchers (
        h            smallint(2) DEFAULT NULL, -- hits
        w            smallint(2) DEFAULT NULL, -- season wins
        l            smallint(2) DEFAULT NULL, -- season losses
-       win          smallint(2), 
-       loss         smallint(2), 
-       hold         smallint(2), 
-       blownhold    smallint(2), 
-       save         smallint(2), 
-       blownsave    smallint(2), 
+       win          smallint(2),
+       loss         smallint(2),
+       hold         smallint(2),
+       blownhold    smallint(2),
+       save         smallint(2),
+       blownsave    smallint(2),
        hld 			int(2),
        sv			int(2),
        bs			int(2),
-       note         VARCHAR(20)        
+       note         VARCHAR(20)
 );
 
 DROP TABLE IF EXISTS teamNames;
@@ -311,7 +309,7 @@ CREATE TABLE playerBIOs (
   jersey_number     CHAR(4),
   bats              CHAR(4),
   team              CHAR(3),
-  id                MEDIUMINT(6) UNSIGNED DEFAULT NULL,
+  id                MEDIUMINT(6) DEFAULT NULL,
   heightFeet        CHAR(1),
   heightInches      CHAR(2),
   type              VARCHAR(7),
@@ -321,9 +319,9 @@ CREATE TABLE playerBIOs (
 DROP TABLE IF EXISTS runners;
 CREATE TABLE runners (
   gameName          VARCHAR(38) NOT NULL,
-  `gameAtBatID`     int(2) UNSIGNED NOT NULL,
+  `gameAtBatID`     int(2) NOT NULL,
   `id`              int(6) UNSIGNED,
-  gamedayRunnerID    int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  gamedayRunnerID    int(10) NOT NULL AUTO_INCREMENT,
   start		    VARCHAR(5),
   end		    VARCHAR(5),
   event		    VARCHAR(40),
@@ -333,9 +331,9 @@ CREATE TABLE runners (
   PRIMARY KEY  (gamedayRunnerID)
 ) ENGINE=InnoDB AUTO_INCREMENT=1315461 DEFAULT CHARSET=latin1;
 
-create unique index runnersIndex on runners (gameName, gameAtBatID, gamedayRunnerID);        
-        
-        
+create unique index runnersIndex on runners (gameName, gameAtBatID, gamedayRunnerID);
+
+
 DROP TABLE IF EXISTS gameDetail;
 CREATE TABLE gameDetail (
   gameName          varchar(38) DEFAULT NULL,
@@ -419,9 +417,32 @@ CREATE TABLE gameDetail (
   home_recap_link               VARCHAR(225),
   away_recap_link               VARCHAR(225),
   photos_link               VARCHAR(225)
-);      
-        
-        
-        
-        
-        
+);
+
+
+DROP TABLE IF EXISTS pregumboHits;
+CREATE TABLE pregumboHits (
+  gameName          VARCHAR(38) NOT NULL,
+  angle          DECIMAL(6,3) NOT NULL,
+  direction          DECIMAL(6,3) NOT NULL,
+  distance          DECIMAL(6,3) NOT NULL,
+  play_guid	    VARCHAR(50),
+  speed          DECIMAL(6,3) NOT NULL,
+  PRIMARY KEY  (play_guid)
+) ENGINE=InnoDB AUTO_INCREMENT=1315461 DEFAULT CHARSET=latin1;
+
+
+DROP TABLE IF EXISTS gameday.feedPlays;
+CREATE TABLE gameday.feedPlays (
+  gameName          VARCHAR(38) NOT NULL,
+  description	    VARCHAR(450),
+  player_id         VARCHAR(6),
+  mph               VARCHAR(6),
+  distance          VARCHAR(6),
+  launch_angle      VARCHAR(6),
+  result            VARCHAR(25),
+  time_tfs	     	VARCHAR(16)
+) ENGINE=InnoDB AUTO_INCREMENT=1315461 DEFAULT CHARSET=latin1;
+
+
+
